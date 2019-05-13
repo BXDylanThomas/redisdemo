@@ -28,7 +28,7 @@ public class JedisSentinel {
         }
         //สอทลืสิด
         jedis.close();
-        jedisSentinelPool.destroy();;
+        jedisSentinelPool.destroy();
 
     }
 }
