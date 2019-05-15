@@ -2,10 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 
-    <context:property-placeholder location="classpath:redis.properties"/>
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
 
     <!--配置jedisPoolConfig相关参数-->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
@@ -56,4 +57,23 @@
         <constructor-arg type="java.lang.String" value="${spring.redis.password}" />
         <constructor-arg type="int" value="${spring.redis.database}" />
     </bean>
+
+
+    <!--1.使用注解驱动-->
+    <cache:annotation-driven cache-manager="redisCacheManager"></cache:annotation-driven>
+
+    <!--2.定义缓存管理器-->
+    <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+        <!--通过构造方法注入redisTemplate-->
+        <constructor-arg index="0" ref="redisTemplate"></constructor-arg>
+        <!--定义超时时间，单位秒-->
+        <property name="defaultExpiration" value="5000"></property>
+        <!--设置缓存器名称-->
+        <property name="cacheNames">
+            <list>
+                <value>redisCacheManager</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

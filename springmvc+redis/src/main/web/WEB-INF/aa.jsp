@@ -10,11 +10,9 @@
 <head>
     <title>Title</title>
 
-    <script  type="text/javascript">
-        Window.location.href="login";
-    </script>
 </head>
-<body>
 
+<body>
+${ssss}aa
 </body>
 </html>
